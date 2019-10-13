@@ -101,8 +101,6 @@ public class ExpensesFragment extends Fragment {
     }
 
     //refresh data after adding
-
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == 100){

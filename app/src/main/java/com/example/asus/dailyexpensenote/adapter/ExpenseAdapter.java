@@ -33,6 +33,7 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
 
     private List<Expense> expenseList;
     private Context context;
+    private TextView expenseType,expenseAmount,expenseDate,expenseTime;
 
     public ExpenseAdapter() {
 
@@ -54,11 +55,11 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int position) {
 
-        Expense expense = expenseList.get(position);
+        final Expense expense = expenseList.get(position);
 
         viewHolder.expenseTypeTV.setText(expense.getExpenseType());
         viewHolder.expenseDateTV.setText(expense.getExpenseDate());
-        viewHolder.expenseAmountTV.setText("৳ "+expense.getExpenseAmount());
+        viewHolder.expenseAmountTV.setText(expense.getExpenseAmount());
 
         //recycler view item click event to show details
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -66,6 +67,22 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
             public void onClick(View v) {
 
                 View view = LayoutInflater.from(context).inflate(R.layout.fragment_bottom_sheet, null);
+
+                expenseType = view.findViewById(R.id.expenseTypeTVId);
+                expenseAmount = view.findViewById(R.id.expenseAmountTVId);
+                expenseDate = view.findViewById(R.id.expenseDateTVId);
+                expenseTime = view.findViewById(R.id.expenseTimeTVId);
+
+                expenseType.setText(expense.getExpenseType());
+                expenseAmount.setText(expense.getExpenseAmount()+" BDT");
+                expenseDate.setText(expense.getExpenseDate());
+
+                //time empty checking
+                if(expense.getExpenseTime() == null || expense.getExpenseTime().isEmpty()){
+                    expenseTime.setText("No time Added");
+                }else {
+                    expenseTime.setText(expense.getExpenseTime());
+                }
 
                 BottomSheetDialog dialog = new BottomSheetDialog(context);
                 dialog.setContentView(view);
