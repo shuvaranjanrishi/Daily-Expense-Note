@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+
     }
 
     //change fragment when nav item selected

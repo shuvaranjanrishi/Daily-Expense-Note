@@ -4,6 +4,7 @@ package com.example.asus.dailyexpensenote.fragment;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -14,12 +15,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.example.asus.dailyexpensenote.model_class.Expense;
 import com.example.asus.dailyexpensenote.adapter.ExpenseAdapter;
@@ -71,6 +74,51 @@ public class ExpensesFragment extends Fragment {
 
         populateDataToRecyclerView();
 
+        //show expenses based on spinner selected item
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(position == 0){
+                    getData();
+                    populateDataToRecyclerView();
+                }else if(position == 1){
+                    Cursor cursor = myDBHelper.getData("SELECT * FROM expense WHERE expense_type = 'Electricity Bill'");
+                    setData(cursor);
+                }
+                else if(position == 2){
+                    Cursor cursor = myDBHelper.getData("SELECT * FROM expense WHERE expense_type = 'Transport Cost'");
+                    setData(cursor);
+                }
+                else if(position == 3){
+                    Cursor cursor = myDBHelper.getData("SELECT * FROM expense WHERE expense_type = 'Medical Cost'");
+                    setData(cursor);
+                }
+                else if(position == 4){
+                    Cursor cursor = myDBHelper.getData("SELECT * FROM expense WHERE expense_type = 'Lunch'");
+                    setData(cursor);
+                }
+                else if(position == 5){
+                    Cursor cursor = myDBHelper.getData("SELECT * FROM expense WHERE expense_type = 'Others'");
+                    setData(cursor);
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+                Cursor cursor = myDBHelper.getData("SELECT * FROM expense");
+                while (cursor.moveToNext()) {
+                    String expenseType = cursor.getString(1);
+                    String expenseAmount = cursor.getString(2);
+                    String expenseDate = cursor.getString(3);
+                    String expenseTime = cursor.getString(4);
+                    expenseList.add(new Expense(expenseType,expenseAmount,expenseDate,expenseTime));
+                }
+            }
+        });
+
+        //floating action button actions here to add new expense
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,11 +148,26 @@ public class ExpensesFragment extends Fragment {
         return view;
     }
 
+    private void setData(Cursor cursor) {
+        expenseList.clear();
+        while (cursor.moveToNext()) {
+            String expenseType = cursor.getString(1);
+            String expenseAmount = cursor.getString(2);
+            String expenseDate = cursor.getString(3);
+            String expenseTime = cursor.getString(4);
+            expenseList.add(new Expense(expenseType,expenseAmount,expenseDate,expenseTime));
+        }
+        populateDataToRecyclerView();
+    }
+
     //refresh data after adding
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == 100){
+
+        if(requestCode == 100 && resultCode == getActivity().RESULT_OK){
+            getData();
             populateDataToRecyclerView();
+            Toast.makeText(getActivity(), "Data saved Successfully", Toast.LENGTH_SHORT).show();
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -112,8 +175,8 @@ public class ExpensesFragment extends Fragment {
     //set all data to recycler view
     public void populateDataToRecyclerView() {
         expenseAdapter = new ExpenseAdapter(expenseList,getActivity());
-        recyclerView.setAdapter(expenseAdapter);
         expenseAdapter.notifyDataSetChanged();
+        recyclerView.setAdapter(expenseAdapter);
     }
 
     //getDataFromDatabase
@@ -140,6 +203,7 @@ public class ExpensesFragment extends Fragment {
                         year, month, day
                 );
                 datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                datePickerDialog.setTitle("Please select date");
                 datePickerDialog.show();
             }
         });
@@ -173,6 +237,7 @@ public class ExpensesFragment extends Fragment {
                         year, month, day
                 );
                 datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                datePickerDialog.setTitle("Please select date");
                 datePickerDialog.show();
             }
         });

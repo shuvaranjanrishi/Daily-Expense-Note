@@ -36,6 +36,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <EditText
+            android:clickable="false"
             android:layout_weight="1"
             android:layout_marginBottom="5dp"
             android:id="@+id/expenseDateETId"

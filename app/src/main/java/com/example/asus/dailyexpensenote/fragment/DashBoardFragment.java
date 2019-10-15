@@ -97,6 +97,13 @@ public class DashBoardFragment extends Fragment {
                         totalExpenseTV.setText(String.valueOf(total));
                     }
                 }
+                else if(position == 5){
+                    Cursor cursor = myDBHelper.getData("SELECT SUM (expense_amount) AS total FROM expense WHERE expense_type = 'Others'");
+                    if (cursor.moveToFirst()) {
+                        int total = cursor.getInt(cursor.getColumnIndex("total"));
+                        totalExpenseTV.setText(String.valueOf(total));
+                    }
+                }
             }
 
             @Override
@@ -137,6 +144,7 @@ public class DashBoardFragment extends Fragment {
                         year, month, day
                 );
                 datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                datePickerDialog.setTitle("Please select date");
                 datePickerDialog.show();
             }
         });
@@ -170,6 +178,7 @@ public class DashBoardFragment extends Fragment {
                         year, month, day
                 );
                 datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                datePickerDialog.setTitle("Please select date");
                 datePickerDialog.show();
             }
         });
@@ -180,10 +189,12 @@ public class DashBoardFragment extends Fragment {
                 month = month + 1;
                 String date = dayOfMonth + "/" + month + "/" + year;
                 toDateTV.setText(date);
+
             }
         };
-    }
 
+
+    }
 
     //initialize all components
     private void init(View view) {
