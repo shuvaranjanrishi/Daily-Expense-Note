@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
 
     //change fragment when nav item selected
     private void replaceFragment(Fragment fragment) {
-
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.frameLayoutId,fragment);
         fragmentTransaction.commit();

@@ -98,6 +98,10 @@ public class ExpensesFragment extends Fragment {
                     setData(cursor);
                 }
                 else if(position == 5){
+                    Cursor cursor = myDBHelper.getData("SELECT * FROM expense WHERE expense_type = 'Dinner'");
+                    setData(cursor);
+                }
+                else if(position == 6){
                     Cursor cursor = myDBHelper.getData("SELECT * FROM expense WHERE expense_type = 'Others'");
                     setData(cursor);
                 }

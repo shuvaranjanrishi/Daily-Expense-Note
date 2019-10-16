@@ -98,6 +98,13 @@ public class DashBoardFragment extends Fragment {
                     }
                 }
                 else if(position == 5){
+                    Cursor cursor = myDBHelper.getData("SELECT SUM (expense_amount) AS total FROM expense WHERE expense_type = 'Dinner'");
+                    if (cursor.moveToFirst()) {
+                        int total = cursor.getInt(cursor.getColumnIndex("total"));
+                        totalExpenseTV.setText(String.valueOf(total));
+                    }
+                }
+                else if(position == 6){
                     Cursor cursor = myDBHelper.getData("SELECT SUM (expense_amount) AS total FROM expense WHERE expense_type = 'Others'");
                     if (cursor.moveToFirst()) {
                         int total = cursor.getInt(cursor.getColumnIndex("total"));
@@ -189,12 +196,22 @@ public class DashBoardFragment extends Fragment {
                 month = month + 1;
                 String date = dayOfMonth + "/" + month + "/" + year;
                 toDateTV.setText(date);
-
+                setDataAccordingToDate(date);
             }
         };
 
-
     }
+
+    //show data according to date
+    private void setDataAccordingToDate(String toDate) {
+        Cursor cursor = myDBHelper.getData("SELECT sum(expense_amount) FROM expense WHERE expense_date BETWEEN '"+toDateTV.getText().toString()+"' AND '"+toDate+"'");
+        if (cursor.moveToFirst()) {
+            int total = cursor.getInt(0);
+            totalExpenseTV.setText(String.valueOf(total));
+            //Toast.makeText(getActivity(), ""+total, Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
     //initialize all components
     private void init(View view) {

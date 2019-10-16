@@ -117,7 +117,8 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
                                 while (cursor.moveToNext()){
                                     id.add(cursor.getInt(0));
                                 }
-                                showDeleteDialog(id.get(position));
+
+                                showDeleteDialog(id.get(position),position);
 
                                 return true;
                         }
@@ -130,16 +131,19 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
     }
 
     //show delete dialog to delete
-    private void showDeleteDialog( final int rowId) {
+    private void showDeleteDialog(final int rowId, final int position) {
+
         AlertDialog.Builder deleteDialog = new AlertDialog.Builder(context);
         deleteDialog.setTitle("Warning!");
         deleteDialog.setMessage("Are you sure to delete?");
+
         deleteDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 try {
                     ExpensesFragment.myDBHelper.deleteDataFromDatabase(rowId);
                     Toast.makeText(context, "deleted", Toast.LENGTH_SHORT).show();
+                    expenseList.remove(position);
                     notifyDataSetChanged();
                 }catch (Exception e){
                     Toast.makeText(context, "Exception: "+e, Toast.LENGTH_SHORT).show();
