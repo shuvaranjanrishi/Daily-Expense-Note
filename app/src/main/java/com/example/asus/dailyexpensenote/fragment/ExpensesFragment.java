@@ -155,11 +155,12 @@ public class ExpensesFragment extends Fragment {
     private void setData(Cursor cursor) {
         expenseList.clear();
         while (cursor.moveToNext()) {
+            String expenseId = cursor.getString(0);
             String expenseType = cursor.getString(1);
             String expenseAmount = cursor.getString(2);
             String expenseDate = cursor.getString(3);
             String expenseTime = cursor.getString(4);
-            expenseList.add(new Expense(expenseType,expenseAmount,expenseDate,expenseTime));
+            expenseList.add(new Expense(expenseId,expenseType,expenseAmount,expenseDate,expenseTime));
         }
         populateDataToRecyclerView();
     }
@@ -173,6 +174,7 @@ public class ExpensesFragment extends Fragment {
             populateDataToRecyclerView();
             Toast.makeText(getActivity(), "Data saved Successfully", Toast.LENGTH_SHORT).show();
         }
+
         super.onActivityResult(requestCode, resultCode, data);
     }
 
@@ -184,8 +186,20 @@ public class ExpensesFragment extends Fragment {
     }
 
     //getDataFromDatabase
-    private void getData() {
-        expenseList = myDBHelper.getDataFromDatabase();
+    public void getData() {
+        Cursor cursor = myDBHelper.getDataFromDatabase();
+
+        while (cursor.moveToNext()) {
+
+            String expenseId = cursor.getString(0);
+            String expenseType = cursor.getString(1);
+            String expenseAmount = cursor.getString(2);
+            String expenseDate = cursor.getString(3);
+            String expenseTime = cursor.getString(4);
+
+            expenseList.add(new Expense(expenseId,expenseType,expenseAmount,expenseDate,expenseTime));
+
+        }
     }
 
     //set date to fromDate TextView by clicking from date icon

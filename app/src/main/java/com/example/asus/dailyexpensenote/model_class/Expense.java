@@ -2,7 +2,7 @@ package com.example.asus.dailyexpensenote.model_class;
 
 public class Expense {
 
-    private int id;
+    private String id;
     private String expenseType;
     private String expenseAmount;
     private String expenseDate;
@@ -15,7 +15,7 @@ public class Expense {
         this.expenseTime = expenseTime;
     }
 
-    public Expense(int id, String expenseType, String expenseAmount, String expenseDate, String expenseTime) {
+    public Expense(String id, String expenseType, String expenseAmount, String expenseDate, String expenseTime) {
         this.id = id;
         this.expenseType = expenseType;
         this.expenseAmount = expenseAmount;
@@ -23,7 +23,7 @@ public class Expense {
         this.expenseTime = expenseTime;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 

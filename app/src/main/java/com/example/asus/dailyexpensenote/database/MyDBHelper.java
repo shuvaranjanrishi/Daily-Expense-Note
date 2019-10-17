@@ -71,24 +71,12 @@ public class MyDBHelper extends SQLiteOpenHelper {
     }
 
     //get all data form database
-    public ArrayList getDataFromDatabase(){
+    public Cursor getDataFromDatabase(){
 
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
         Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM "+TABLE_NAME,null);
 
-        ArrayList expenseList = new ArrayList();
-
-        while (cursor.moveToNext()) {
-
-            String expenseType = cursor.getString(cursor.getColumnIndex(EXPENSE_TYPE));
-            String expenseAmount = cursor.getString(cursor.getColumnIndex(EXPENSE_AMOUNT));
-            String expenseDate = cursor.getString(cursor.getColumnIndex(EXPENSE_DATE));
-            String expenseTime = cursor.getString(cursor.getColumnIndex(EXPENSE_TIME));
-
-            expenseList.add(new Expense(expenseType,expenseAmount,expenseDate,expenseTime));
-
-        }
-        return expenseList;
+        return cursor;
     }
 
     public int deleteDataFromDatabase(int rowId) {
@@ -102,5 +90,21 @@ public class MyDBHelper extends SQLiteOpenHelper {
 
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         return sqLiteDatabase.rawQuery(sql,null);
+    }
+
+    //update data to database
+    public long updateDataToDatabase(String id,String expenseType, String expenseAmount,String expenseDate,String expenseTime){
+
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(EXPENSE_TYPE,expenseType);
+        contentValues.put(EXPENSE_AMOUNT,expenseAmount);
+        contentValues.put(EXPENSE_DATE,expenseDate);
+        contentValues.put(EXPENSE_TIME,expenseTime);
+
+        long rowId = sqLiteDatabase.update(TABLE_NAME,contentValues,"id = ?",new String[]{id});
+
+        return rowId;
     }
 }

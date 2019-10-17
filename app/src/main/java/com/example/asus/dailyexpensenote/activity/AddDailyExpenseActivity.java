@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.example.asus.dailyexpensenote.database.MyDBHelper;
 import com.example.asus.dailyexpensenote.R;
+import com.example.asus.dailyexpensenote.fragment.ExpensesFragment;
 
 import java.util.Calendar;
 
@@ -39,6 +40,7 @@ public class AddDailyExpenseActivity extends AppCompatActivity {
     private TimePickerDialog.OnTimeSetListener mTimeSetListener;
 
     private String expenseType,expenseAmount,expenseDate,expenseTime;
+    private String idIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +53,8 @@ public class AddDailyExpenseActivity extends AppCompatActivity {
 
         getTime();
 
+        getUpdateIntent();
+
         //add Expense button action
         addExpenseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,15 +63,49 @@ public class AddDailyExpenseActivity extends AppCompatActivity {
                 //getDataFromUser();
                 getDataFromUser();
 
-                if(!validate()){
-                    return;
-                }else {
-                    //insert data to database
-                    insertData();
-                }
+                if(idIntent != null){
 
+                    if(!validate()){
+                        return;
+                    }else {
+                        //update data to database
+                        long resultId = myDBHelper.updateDataToDatabase(idIntent,expenseType,expenseAmount,expenseDate,expenseTime);
+
+                        if(resultId > 0){
+                            setResult(5);
+                            Toast.makeText(AddDailyExpenseActivity.this, "Row "+resultId+" Updated Successfully", Toast.LENGTH_SHORT).show();
+                            finish();
+                        }else {
+                            Toast.makeText(AddDailyExpenseActivity.this, "Data are not Updated", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                }else {
+                    if(!validate()){
+                        return;
+                    }else {
+                        //insert data to database
+                        insertData();
+                    }
+                }
             }
         });
+    }
+
+    private void getUpdateIntent() {
+
+        idIntent = getIntent().getStringExtra("EXPENSE_ID");
+
+        if(idIntent != null){
+
+            int spinnerItemPosition = arrayAdapter.getPosition(getIntent().getStringExtra("EXPENSE_TYPE"));
+            spinner.setSelection(spinnerItemPosition);
+            amountET.setText(getIntent().getStringExtra("EXPENSE_AMOUNT"));
+            dateET.setText(getIntent().getStringExtra("EXPENSE_DATE"));
+            timeET.setText(getIntent().getStringExtra("EXPENSE_TIME"));
+
+            addExpenseBtn.setText("Update Expense");
+        }
     }
 
     //check all data empty validation

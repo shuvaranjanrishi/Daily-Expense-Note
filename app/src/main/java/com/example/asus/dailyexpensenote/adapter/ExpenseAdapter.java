@@ -3,6 +3,7 @@ package com.example.asus.dailyexpensenote.adapter;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetDialog;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.asus.dailyexpensenote.R;
+import com.example.asus.dailyexpensenote.activity.AddDailyExpenseActivity;
 import com.example.asus.dailyexpensenote.activity.MainActivity;
 import com.example.asus.dailyexpensenote.database.MyDBHelper;
 import com.example.asus.dailyexpensenote.fragment.BottomSheetFragment;
@@ -106,7 +108,8 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
 
                             case R.id.updateOptionId:
                                 //update option click action
-                                Toast.makeText(context, ""+item, Toast.LENGTH_SHORT).show();
+                                update(expense);
+
                                 return true;
 
                             case R.id.deleteOptionId:
@@ -128,6 +131,20 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
                 popupMenu.show();
             }
         });
+    }
+
+    private void update(Expense expense) {
+
+
+        Intent intent = new Intent(context,AddDailyExpenseActivity.class);
+
+        intent.putExtra("EXPENSE_ID",expense.getId());
+        intent.putExtra("EXPENSE_TYPE",expense.getExpenseType());
+        intent.putExtra("EXPENSE_AMOUNT",expense.getExpenseAmount());
+        intent.putExtra("EXPENSE_DATE",expense.getExpenseDate());
+        intent.putExtra("EXPENSE_TIME",expense.getExpenseTime());
+
+        context.startActivity(intent);
     }
 
     //show delete dialog to delete
