@@ -1,22 +1,30 @@
 package com.example.asus.dailyexpensenote.adapter;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +44,7 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
     private List<Expense> expenseList;
     private Context context;
     private TextView expenseType,expenseAmount,expenseDate,expenseTime;
+    private Button showDocumentBtn;
 
     public ExpenseAdapter() {
 
@@ -74,6 +83,7 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
                 expenseAmount = view.findViewById(R.id.expenseAmountTVId);
                 expenseDate = view.findViewById(R.id.expenseDateTVId);
                 expenseTime = view.findViewById(R.id.expenseTimeTVId);
+                showDocumentBtn = view.findViewById(R.id.showDocumentBtnId);
 
                 expenseType.setText(expense.getExpenseType());
                 expenseAmount.setText(expense.getExpenseAmount()+" BDT");
@@ -85,6 +95,35 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
                 }else {
                     expenseTime.setText(expense.getExpenseTime());
                 }
+
+                showDocumentBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Dialog builder = new Dialog(context);
+                        View  view = LayoutInflater.from(context).inflate(R.layout.image_view_layout_design,null);
+                        builder.setTitle("Document of "+expense.getExpenseType());
+                        builder.setContentView(view);
+                        ImageView imageView = view.findViewById(R.id.imageViewLayoutDesignId);
+                        imageView.setImageBitmap(stringToBitmap(expense.getExpenseImage()));
+                        builder.show();
+//                        builder.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//                        builder.getWindow().setBackgroundDrawable(
+//                                new ColorDrawable(android.graphics.Color.TRANSPARENT));
+//                        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+//                            @Override
+//                            public void onDismiss(DialogInterface dialogInterface) {
+//                                //nothing;
+//                            }
+//                        });
+//
+//                        ImageView imageView = new ImageView(context);
+//                        imageView.setImageBitmap(stringToBitmap(expense.getExpenseImage()));
+//                        builder.addContentView(imageView, new RelativeLayout.LayoutParams(
+//                                ViewGroup.LayoutParams.WRAP_CONTENT,
+//                                ViewGroup.LayoutParams.WRAP_CONTENT));
+//                        builder.show();
+                    }
+                });
 
                 BottomSheetDialog dialog = new BottomSheetDialog(context);
                 dialog.setContentView(view);
@@ -131,6 +170,17 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
                 popupMenu.show();
             }
         });
+    }
+
+    private Bitmap stringToBitmap(String encodedString){
+        try {
+            byte [] encodeByte=Base64.decode(encodedString,Base64.DEFAULT);
+            Bitmap bitmap=BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            return bitmap;
+        } catch(Exception e) {
+            e.getMessage();
+            return null;
+        }
     }
 
     private void update(Expense expense) {

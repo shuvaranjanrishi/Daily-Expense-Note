@@ -111,14 +111,6 @@ public class ExpensesFragment extends Fragment {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
-                Cursor cursor = myDBHelper.getData("SELECT * FROM expense");
-                while (cursor.moveToNext()) {
-                    String expenseType = cursor.getString(1);
-                    String expenseAmount = cursor.getString(2);
-                    String expenseDate = cursor.getString(3);
-                    String expenseTime = cursor.getString(4);
-                    expenseList.add(new Expense(expenseType,expenseAmount,expenseDate,expenseTime));
-                }
             }
         });
 
@@ -160,7 +152,8 @@ public class ExpensesFragment extends Fragment {
             String expenseAmount = cursor.getString(2);
             String expenseDate = cursor.getString(3);
             String expenseTime = cursor.getString(4);
-            expenseList.add(new Expense(expenseId,expenseType,expenseAmount,expenseDate,expenseTime));
+            String expenseImage = cursor.getString(5);
+            expenseList.add(new Expense(expenseId,expenseType,expenseAmount,expenseDate,expenseTime,expenseImage));
         }
         populateDataToRecyclerView();
     }
@@ -187,6 +180,7 @@ public class ExpensesFragment extends Fragment {
 
     //getDataFromDatabase
     public void getData() {
+        expenseList.clear();
         Cursor cursor = myDBHelper.getDataFromDatabase();
 
         while (cursor.moveToNext()) {
@@ -196,8 +190,9 @@ public class ExpensesFragment extends Fragment {
             String expenseAmount = cursor.getString(2);
             String expenseDate = cursor.getString(3);
             String expenseTime = cursor.getString(4);
+            String expenseImage = cursor.getString(5);
 
-            expenseList.add(new Expense(expenseId,expenseType,expenseAmount,expenseDate,expenseTime));
+            expenseList.add(new Expense(expenseId,expenseType,expenseAmount,expenseDate,expenseTime,expenseImage));
 
         }
     }

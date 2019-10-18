@@ -7,20 +7,15 @@ public class Expense {
     private String expenseAmount;
     private String expenseDate;
     private String expenseTime;
+    private String expenseImage;
 
-    public Expense(String expenseType, String expenseAmount, String expenseDate, String expenseTime) {
-        this.expenseType = expenseType;
-        this.expenseAmount = expenseAmount;
-        this.expenseDate = expenseDate;
-        this.expenseTime = expenseTime;
-    }
-
-    public Expense(String id, String expenseType, String expenseAmount, String expenseDate, String expenseTime) {
+    public Expense(String id, String expenseType, String expenseAmount, String expenseDate, String expenseTime, String expenseImage) {
         this.id = id;
         this.expenseType = expenseType;
         this.expenseAmount = expenseAmount;
         this.expenseDate = expenseDate;
         this.expenseTime = expenseTime;
+        this.expenseImage = expenseImage;
     }
 
     public String getId() {
@@ -41,5 +36,9 @@ public class Expense {
 
     public String getExpenseTime() {
         return expenseTime;
+    }
+
+    public String getExpenseImage() {
+        return expenseImage;
     }
 }

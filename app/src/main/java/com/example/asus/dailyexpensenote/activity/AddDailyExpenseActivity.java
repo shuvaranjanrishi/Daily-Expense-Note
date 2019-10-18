@@ -1,12 +1,20 @@
 package com.example.asus.dailyexpensenote.activity;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -21,6 +29,7 @@ import com.example.asus.dailyexpensenote.database.MyDBHelper;
 import com.example.asus.dailyexpensenote.R;
 import com.example.asus.dailyexpensenote.fragment.ExpensesFragment;
 
+import java.io.ByteArrayOutputStream;
 import java.util.Calendar;
 
 public class AddDailyExpenseActivity extends AppCompatActivity {
@@ -34,13 +43,14 @@ public class AddDailyExpenseActivity extends AppCompatActivity {
 
     private EditText amountET,dateET,timeET;
     private Button addDocumentBtn,addExpenseBtn;
-    private ImageView dateIV,timeIV;
+    private ImageView dateIV,timeIV,documentIV;
 
     private DatePickerDialog.OnDateSetListener mDateSetListener;
     private TimePickerDialog.OnTimeSetListener mTimeSetListener;
 
     private String expenseType,expenseAmount,expenseDate,expenseTime;
     private String idIntent;
+    private Bitmap bitmapImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +64,30 @@ public class AddDailyExpenseActivity extends AppCompatActivity {
         getTime();
 
         getUpdateIntent();
+
+        //add document button action
+        addDocumentBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(AddDailyExpenseActivity.this);
+                String[] items = {"From Camera","From Gallery"};
+                builder.setTitle("Choose an action");
+                builder.setItems(items, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case 0:
+                                openCamera();
+                            case 1:
+                                openGallery();
+                        }
+                    }
+                });
+
+                Dialog dialog = builder.create();
+                dialog.show();
+            }
+        });
 
         //add Expense button action
         addExpenseBtn.setOnClickListener(new View.OnClickListener() {
@@ -90,6 +124,36 @@ public class AddDailyExpenseActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private String bitmapToString(Bitmap bitmap){
+        ByteArrayOutputStream baos=new  ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG,100, baos);
+        byte [] b=baos.toByteArray();
+        String stringImage=Base64.encodeToString(b, Base64.DEFAULT);
+        return stringImage;
+    }
+
+    private void openGallery() {
+
+    }
+
+    private void openCamera() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent,88);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode == RESULT_OK){
+            if(requestCode == 88){
+                Bundle bundle = data.getExtras();
+                bitmapImage = (Bitmap) bundle.get("data");
+                documentIV.setImageBitmap(bitmapImage);
+            }
+        }
     }
 
     private void getUpdateIntent() {
@@ -200,7 +264,7 @@ public class AddDailyExpenseActivity extends AppCompatActivity {
     // insert data to database
     private void insertData() {
 
-        long resultId = myDBHelper.insertDataToDatabase(expenseType,expenseAmount,expenseDate,expenseTime);
+        long resultId = myDBHelper.insertDataToDatabase(expenseType,expenseAmount,expenseDate,expenseTime,bitmapToString(bitmapImage));
 
          if(resultId > 0){
              setResult(RESULT_OK);
@@ -237,6 +301,7 @@ public class AddDailyExpenseActivity extends AppCompatActivity {
 
         dateIV = findViewById(R.id.dateIVId);
         timeIV = findViewById(R.id.timeIVId);
+        documentIV = findViewById(R.id.documentIVId);
 
         addDocumentBtn = findViewById(R.id.addDocumentBtnId);
         addExpenseBtn = findViewById(R.id.addExpenseBtnId);

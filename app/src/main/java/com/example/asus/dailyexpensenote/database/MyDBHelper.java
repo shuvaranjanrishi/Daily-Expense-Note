@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class MyDBHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "daily_expense_note_db";
-    private static final int VERSION = 1;
+    private static final int VERSION = 2;
 
     private static final String TABLE_NAME = "expense";
     private static final String ID = "id";
@@ -22,8 +22,9 @@ public class MyDBHelper extends SQLiteOpenHelper {
     private static final String EXPENSE_AMOUNT = "expense_amount";
     private static final String EXPENSE_DATE = "expense_date";
     private static final String EXPENSE_TIME = "expense_time";
+    private static final String EXPENSE_IMAGE = "expense_image";
 
-    private static final String CREATE_TABLE = " CREATE TABLE "+TABLE_NAME+"("+ID+" INTEGER PRIMARY KEY AUTOINCREMENT, "+EXPENSE_TYPE+" TEXT, "+EXPENSE_AMOUNT+" TEXT, "+EXPENSE_DATE+" TEXT, "+EXPENSE_TIME+" TEXT ) ";
+    private static final String CREATE_TABLE = " CREATE TABLE "+TABLE_NAME+"("+ID+" INTEGER PRIMARY KEY AUTOINCREMENT, "+EXPENSE_TYPE+" TEXT, "+EXPENSE_AMOUNT+" TEXT, "+EXPENSE_DATE+" TEXT, "+EXPENSE_TIME+" TEXT,"+EXPENSE_IMAGE+" TEXT) ";
     private static final String DROP_TABLE = " DROP TABLE IF EXISTS "+TABLE_NAME;
 
     private Context context;
@@ -55,7 +56,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
     }
 
     //insert data to database
-    public long insertDataToDatabase(String expenseType,String expenseAmount,String expenseDate,String expenseTime){
+    public long insertDataToDatabase(String expenseType,String expenseAmount,String expenseDate,String expenseTime,String stringImage){
 
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -64,6 +65,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
         contentValues.put(EXPENSE_AMOUNT,expenseAmount);
         contentValues.put(EXPENSE_DATE,expenseDate);
         contentValues.put(EXPENSE_TIME,expenseTime);
+        contentValues.put(EXPENSE_IMAGE,stringImage);
 
         long rowId = sqLiteDatabase.insert(TABLE_NAME,null,contentValues);
 
