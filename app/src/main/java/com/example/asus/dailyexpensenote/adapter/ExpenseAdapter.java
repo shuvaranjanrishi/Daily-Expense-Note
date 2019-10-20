@@ -103,25 +103,10 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
                         View  view = LayoutInflater.from(context).inflate(R.layout.image_view_layout_design,null);
                         builder.setTitle("Document of "+expense.getExpenseType());
                         builder.setContentView(view);
+
                         ImageView imageView = view.findViewById(R.id.imageViewLayoutDesignId);
                         imageView.setImageBitmap(stringToBitmap(expense.getExpenseImage()));
                         builder.show();
-//                        builder.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//                        builder.getWindow().setBackgroundDrawable(
-//                                new ColorDrawable(android.graphics.Color.TRANSPARENT));
-//                        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-//                            @Override
-//                            public void onDismiss(DialogInterface dialogInterface) {
-//                                //nothing;
-//                            }
-//                        });
-//
-//                        ImageView imageView = new ImageView(context);
-//                        imageView.setImageBitmap(stringToBitmap(expense.getExpenseImage()));
-//                        builder.addContentView(imageView, new RelativeLayout.LayoutParams(
-//                                ViewGroup.LayoutParams.WRAP_CONTENT,
-//                                ViewGroup.LayoutParams.WRAP_CONTENT));
-//                        builder.show();
                     }
                 });
 
@@ -193,6 +178,7 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
         intent.putExtra("EXPENSE_AMOUNT",expense.getExpenseAmount());
         intent.putExtra("EXPENSE_DATE",expense.getExpenseDate());
         intent.putExtra("EXPENSE_TIME",expense.getExpenseTime());
+        intent.putExtra("EXPENSE_IMAGE",expense.getExpenseImage());
 
         context.startActivity(intent);
     }

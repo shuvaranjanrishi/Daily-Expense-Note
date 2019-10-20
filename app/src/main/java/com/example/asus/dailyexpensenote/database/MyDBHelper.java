@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class MyDBHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "daily_expense_note_db";
-    private static final int VERSION = 2;
+    private static final int VERSION = 3;
 
     private static final String TABLE_NAME = "expense";
     private static final String ID = "id";
@@ -95,7 +95,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
     }
 
     //update data to database
-    public long updateDataToDatabase(String id,String expenseType, String expenseAmount,String expenseDate,String expenseTime){
+    public long updateDataToDatabase(String id,String expenseType, String expenseAmount,String expenseDate,String expenseTime,String stringImage){
 
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -104,6 +104,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
         contentValues.put(EXPENSE_AMOUNT,expenseAmount);
         contentValues.put(EXPENSE_DATE,expenseDate);
         contentValues.put(EXPENSE_TIME,expenseTime);
+        contentValues.put(EXPENSE_IMAGE,stringImage);
 
         long rowId = sqLiteDatabase.update(TABLE_NAME,contentValues,"id = ?",new String[]{id});
 

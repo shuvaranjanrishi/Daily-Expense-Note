@@ -8,8 +8,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -27,15 +29,16 @@ import android.widget.Toast;
 
 import com.example.asus.dailyexpensenote.database.MyDBHelper;
 import com.example.asus.dailyexpensenote.R;
-import com.example.asus.dailyexpensenote.fragment.ExpensesFragment;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.sql.Time;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class AddDailyExpenseActivity extends AppCompatActivity {
 
     private MyDBHelper myDBHelper;
-    private SQLiteDatabase sqLiteDatabase;
 
     private Spinner spinner;
     private String[] spinnerList;
@@ -43,14 +46,14 @@ public class AddDailyExpenseActivity extends AppCompatActivity {
 
     private EditText amountET,dateET,timeET;
     private Button addDocumentBtn,addExpenseBtn;
-    private ImageView dateIV,timeIV,documentIV;
+    private ImageView dateIV,timeIV,documentIV,documentCancelIV;
 
     private DatePickerDialog.OnDateSetListener mDateSetListener;
     private TimePickerDialog.OnTimeSetListener mTimeSetListener;
 
     private String expenseType,expenseAmount,expenseDate,expenseTime;
     private String idIntent;
-    private Bitmap bitmapImage;
+    private Bitmap bitmapImage = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +68,17 @@ public class AddDailyExpenseActivity extends AppCompatActivity {
 
         getUpdateIntent();
 
+        //document cancel image view click action
+        documentCancelIV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bitmapImage = null;
+                Toast.makeText(AddDailyExpenseActivity.this, "No Document Selected", Toast.LENGTH_SHORT).show();
+                documentIV.setImageResource(R.drawable.ic_assignment_black_24dp);
+                documentCancelIV.setVisibility(View.INVISIBLE);
+            }
+        });
+
         //add document button action
         addDocumentBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,8 +92,10 @@ public class AddDailyExpenseActivity extends AppCompatActivity {
                         switch (which){
                             case 0:
                                 openCamera();
+                                break;
                             case 1:
                                 openGallery();
+                                break;
                         }
                     }
                 });
@@ -103,10 +119,9 @@ public class AddDailyExpenseActivity extends AppCompatActivity {
                         return;
                     }else {
                         //update data to database
-                        long resultId = myDBHelper.updateDataToDatabase(idIntent,expenseType,expenseAmount,expenseDate,expenseTime);
+                        long resultId = myDBHelper.updateDataToDatabase(idIntent,expenseType,expenseAmount,expenseDate,expenseTime,bitmapToString(bitmapImage));
 
                         if(resultId > 0){
-                            setResult(5);
                             Toast.makeText(AddDailyExpenseActivity.this, "Row "+resultId+" Updated Successfully", Toast.LENGTH_SHORT).show();
                             finish();
                         }else {
@@ -134,8 +149,21 @@ public class AddDailyExpenseActivity extends AppCompatActivity {
         return stringImage;
     }
 
-    private void openGallery() {
+    private Bitmap stringToBitmap(String encodedString){
+        try {
+            byte [] encodeByte=Base64.decode(encodedString,Base64.DEFAULT);
+            Bitmap bitmap=BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            return bitmap;
+        } catch(Exception e) {
+            e.getMessage();
+            return null;
+        }
+    }
 
+    private void openGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.setType("image/*");
+        startActivityForResult(intent,99);
     }
 
     private void openCamera() {
@@ -152,6 +180,12 @@ public class AddDailyExpenseActivity extends AppCompatActivity {
                 Bundle bundle = data.getExtras();
                 bitmapImage = (Bitmap) bundle.get("data");
                 documentIV.setImageBitmap(bitmapImage);
+                documentCancelIV.setVisibility(View.VISIBLE);
+            }
+            else if(requestCode == 99){
+               //Uri uri = data.getData();
+               // bitmapImage = (Bitmap) Uri.parse(uri);
+               // documentIV.setImageBitmap(bitmapImage);
             }
         }
     }
@@ -167,7 +201,11 @@ public class AddDailyExpenseActivity extends AppCompatActivity {
             amountET.setText(getIntent().getStringExtra("EXPENSE_AMOUNT"));
             dateET.setText(getIntent().getStringExtra("EXPENSE_DATE"));
             timeET.setText(getIntent().getStringExtra("EXPENSE_TIME"));
+            bitmapImage = stringToBitmap(getIntent().getStringExtra("EXPENSE_IMAGE"));
+            documentIV.setImageBitmap(bitmapImage);
 
+            documentCancelIV.setVisibility(View.VISIBLE);
+            setTitle("Update "+getIntent().getStringExtra("EXPENSE_TYPE"));
             addExpenseBtn.setText("Update Expense");
         }
     }
@@ -222,8 +260,9 @@ public class AddDailyExpenseActivity extends AppCompatActivity {
         mTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                String time = hourOfDay + " : " + minute;
-                timeET.setText(time);
+                Time time = new Time(hourOfDay,minute,00);
+                SimpleDateFormat timeFormater = new SimpleDateFormat("hh:mm:ss aa");
+                timeET.setText(timeFormater.format(time).toString());
             }
         };
     }
@@ -264,15 +303,28 @@ public class AddDailyExpenseActivity extends AppCompatActivity {
     // insert data to database
     private void insertData() {
 
-        long resultId = myDBHelper.insertDataToDatabase(expenseType,expenseAmount,expenseDate,expenseTime,bitmapToString(bitmapImage));
+        if(bitmapImage != null){
+            long resultId = myDBHelper.insertDataToDatabase(expenseType,expenseAmount,expenseDate,expenseTime,bitmapToString(bitmapImage));
 
-         if(resultId > 0){
-             setResult(RESULT_OK);
-             Toast.makeText(AddDailyExpenseActivity.this, "Row "+resultId+" inserted Successfully", Toast.LENGTH_SHORT).show();
-             finish();
-         }else {
-             Toast.makeText(AddDailyExpenseActivity.this, "Data are not inserted", Toast.LENGTH_SHORT).show();
+            if(resultId > 0){
+                setResult(RESULT_OK);
+                Toast.makeText(AddDailyExpenseActivity.this, "Row "+resultId+" inserted Successfully", Toast.LENGTH_SHORT).show();
+                finish();
+            }else {
+                Toast.makeText(AddDailyExpenseActivity.this, "Data are not inserted", Toast.LENGTH_SHORT).show();
+            }
+        }else {
+            long resultId = myDBHelper.insertDataToDatabase(expenseType,expenseAmount,expenseDate,expenseTime,null);
+
+            if(resultId > 0){
+                setResult(RESULT_OK);
+                Toast.makeText(AddDailyExpenseActivity.this, "Row "+resultId+" inserted Successfully", Toast.LENGTH_SHORT).show();
+                finish();
+            }else {
+                Toast.makeText(AddDailyExpenseActivity.this, "Data are not inserted", Toast.LENGTH_SHORT).show();
+            }
         }
+
     }
 
     //get all data from user input
@@ -288,7 +340,6 @@ public class AddDailyExpenseActivity extends AppCompatActivity {
     private void init() {
 
         myDBHelper = new MyDBHelper(AddDailyExpenseActivity.this);
-        sqLiteDatabase = myDBHelper.getWritableDatabase();
 
         spinner = findViewById(R.id.selectExpenseTypeSpinnerId);
         spinnerList = getResources().getStringArray(R.array.spinner_list);
@@ -302,6 +353,7 @@ public class AddDailyExpenseActivity extends AppCompatActivity {
         dateIV = findViewById(R.id.dateIVId);
         timeIV = findViewById(R.id.timeIVId);
         documentIV = findViewById(R.id.documentIVId);
+        documentCancelIV = findViewById(R.id.cancelIVId);
 
         addDocumentBtn = findViewById(R.id.addDocumentBtnId);
         addExpenseBtn = findViewById(R.id.addExpenseBtnId);
