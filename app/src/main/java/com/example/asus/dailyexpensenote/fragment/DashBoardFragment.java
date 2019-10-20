@@ -40,6 +40,8 @@ public class DashBoardFragment extends Fragment {
     private DatePickerDialog.OnDateSetListener mFromDateSetListener;
     private DatePickerDialog.OnDateSetListener mToDateSetListener;
 
+    private String fromDate;
+
     public DashBoardFragment() {
         // Required empty public constructor
     }
@@ -56,8 +58,6 @@ public class DashBoardFragment extends Fragment {
         getFromDate();
 
         getToDate();
-
-        getData();//show default total expense
 
         //show total expense based on spinner selected item
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -122,16 +122,6 @@ public class DashBoardFragment extends Fragment {
         return view;
     }
 
-    //show total expense in dashboard
-    private void getData() {
-
-        Cursor cursor = myDBHelper.getData("SELECT SUM (expense_amount) AS total FROM expense");
-        if (cursor.moveToFirst()) {
-            int total = cursor.getInt(cursor.getColumnIndex("total"));
-            totalExpenseTV.setText(String.valueOf(total));
-        }
-    }
-
     //set date to fromDate TextView by clicking from date icon
     private void getFromDate() {
 
@@ -160,8 +150,8 @@ public class DashBoardFragment extends Fragment {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 month = month + 1;
-                String date = dayOfMonth + "/" + month + "/" + year;
-                fromDateTV.setText(date);
+                fromDate = dayOfMonth + "/" + month + "/" + year;
+                fromDateTV.setText(fromDate);
             }
         };
     }
@@ -169,46 +159,105 @@ public class DashBoardFragment extends Fragment {
     //set date to toDate TextView by clicking to date icon
     private void getToDate() {
 
-        toDateIV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            toDateIV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-                Calendar calendar = Calendar.getInstance();
-                int day = calendar.get(Calendar.DAY_OF_MONTH);
-                int month = calendar.get(Calendar.MONTH);
-                int year = calendar.get(Calendar.YEAR);
+                    if(fromDate != null){
+                        Calendar calendar = Calendar.getInstance();
+                        int day = calendar.get(Calendar.DAY_OF_MONTH);
+                        int month = calendar.get(Calendar.MONTH);
+                        int year = calendar.get(Calendar.YEAR);
 
-                DatePickerDialog datePickerDialog = new DatePickerDialog(
-                        getActivity(),
-                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
-                        mToDateSetListener,
-                        year, month, day
-                );
-                datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                datePickerDialog.setTitle("Please select date");
-                datePickerDialog.show();
-            }
-        });
+                        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                                getActivity(),
+                                android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                                mToDateSetListener,
+                                year, month, day
+                        );
+                        datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        datePickerDialog.setTitle("Please select date");
+                        datePickerDialog.show();
+                    }else {
+                        Toast.makeText(getActivity(), "Select From Date First", Toast.LENGTH_SHORT).show();
+                    }
 
-        mToDateSetListener = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                month = month + 1;
-                String date = dayOfMonth + "/" + month + "/" + year;
-                toDateTV.setText(date);
-                setDataAccordingToDate(date);
-            }
-        };
+                }
+            });
+
+            mToDateSetListener = new DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                    month = month + 1;
+                    String toDate = dayOfMonth + "/" + month + "/" + year;
+                    toDateTV.setText(toDate);
+                    setDataAccordingToDate(toDate);
+                }
+            };
 
     }
 
     //show data according to date
     private void setDataAccordingToDate(String toDate) {
-        Cursor cursor = myDBHelper.getData("SELECT sum(expense_amount) FROM expense WHERE expense_date BETWEEN '"+toDateTV.getText().toString()+"' AND '"+toDate+"'");
-        if (cursor.moveToFirst()) {
-            int total = cursor.getInt(0);
-            totalExpenseTV.setText(String.valueOf(total));
-            //Toast.makeText(getActivity(), ""+total, Toast.LENGTH_SHORT).show();
+        String selectedItem = spinner.getSelectedItem().toString();
+        Cursor cursor;
+
+        switch (selectedItem) {
+            case "Select Expense Type":
+                cursor = myDBHelper.getData("SELECT SUM (expense_amount) AS total FROM expense WHERE expense_date BETWEEN '"+fromDate+"' AND '"+toDate+"' ");
+                if (cursor.moveToFirst()) {
+                    int total = cursor.getInt(cursor.getColumnIndex("total"));
+                    totalExpenseTV.setText(String.valueOf(total));
+                }
+                break;
+
+            case "Electric Bill":
+                cursor = myDBHelper.getData("SELECT SUM (expense_amount) AS total FROM expense WHERE expense_date BETWEEN '"+fromDate+"' AND '"+toDate+"' ");
+                if (cursor.moveToFirst()) {
+                    int total = cursor.getInt(cursor.getColumnIndex("total"));
+                    totalExpenseTV.setText(String.valueOf(total));
+                }
+                break;
+
+            case "Transport Cost":
+                cursor = myDBHelper.getData("SELECT SUM (expense_amount) AS total FROM expense WHERE expense_date BETWEEN '"+fromDate+"' AND '"+toDate+"' ");
+                if (cursor.moveToFirst()) {
+                    int total = cursor.getInt(cursor.getColumnIndex("total"));
+                    totalExpenseTV.setText(String.valueOf(total));
+                }
+                break;
+
+            case "Medical Cost":
+                cursor = myDBHelper.getData("SELECT SUM (expense_amount) AS total FROM expense WHERE expense_date BETWEEN '"+fromDate+"' AND '"+toDate+"' ");
+                if (cursor.moveToFirst()) {
+                    int total = cursor.getInt(cursor.getColumnIndex("total"));
+                    totalExpenseTV.setText(String.valueOf(total));
+                }
+                break;
+
+            case "Lunch":
+                cursor = myDBHelper.getData("SELECT SUM (expense_amount) AS total FROM expense WHERE expense_date BETWEEN '"+fromDate+"' AND '"+toDate+"' ");
+                if (cursor.moveToFirst()) {
+                    int total = cursor.getInt(cursor.getColumnIndex("total"));
+                    totalExpenseTV.setText(String.valueOf(total));
+                }
+                break;
+
+            case "Dinner":
+                cursor = myDBHelper.getData("SELECT SUM (expense_amount) AS total FROM expense WHERE expense_date BETWEEN '"+fromDate+"' AND '"+toDate+"' ");
+                if (cursor.moveToFirst()) {
+                    int total = cursor.getInt(cursor.getColumnIndex("total"));
+                    totalExpenseTV.setText(String.valueOf(total));
+                }
+                break;
+
+            case "Others":
+                cursor = myDBHelper.getData("SELECT SUM (expense_amount) AS total FROM expense WHERE expense_date BETWEEN '"+fromDate+"' AND '"+toDate+"' ");
+                if (cursor.moveToFirst()) {
+                    int total = cursor.getInt(cursor.getColumnIndex("total"));
+                    totalExpenseTV.setText(String.valueOf(total));
+                }
+                break;
         }
     }
 

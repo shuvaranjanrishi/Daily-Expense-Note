@@ -3,6 +3,8 @@ package com.example.asus.dailyexpensenote.fragment;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.view.LayoutInflater;
@@ -19,11 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BottomSheetFragment extends BottomSheetDialogFragment {
-
-    private MyDBHelper myDBHelper;
-    private List<Expense> expenseList;
-    private int position;
-    private Context context;
 
     public BottomSheetFragment() {
         // Required empty public constructor

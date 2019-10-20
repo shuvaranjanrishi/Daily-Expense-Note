@@ -193,6 +193,7 @@ public class AddDailyExpenseActivity extends AppCompatActivity {
     private void getUpdateIntent() {
 
         idIntent = getIntent().getStringExtra("EXPENSE_ID");
+        Bitmap bitmapImageIntent = stringToBitmap(getIntent().getStringExtra("EXPENSE_IMAGE"));
 
         if(idIntent != null){
 
@@ -201,10 +202,14 @@ public class AddDailyExpenseActivity extends AppCompatActivity {
             amountET.setText(getIntent().getStringExtra("EXPENSE_AMOUNT"));
             dateET.setText(getIntent().getStringExtra("EXPENSE_DATE"));
             timeET.setText(getIntent().getStringExtra("EXPENSE_TIME"));
-            bitmapImage = stringToBitmap(getIntent().getStringExtra("EXPENSE_IMAGE"));
-            documentIV.setImageBitmap(bitmapImage);
 
-            documentCancelIV.setVisibility(View.VISIBLE);
+            if(bitmapImageIntent != null){
+                bitmapImage = bitmapImageIntent;
+                documentIV.setImageBitmap(bitmapImage);
+                documentCancelIV.setVisibility(View.VISIBLE);
+            }else {
+                documentIV.setImageResource(R.drawable.ic_assignment_black_24dp);
+            }
             setTitle("Update "+getIntent().getStringExtra("EXPENSE_TYPE"));
             addExpenseBtn.setText("Update Expense");
         }
@@ -261,13 +266,13 @@ public class AddDailyExpenseActivity extends AppCompatActivity {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 Time time = new Time(hourOfDay,minute,00);
-                SimpleDateFormat timeFormater = new SimpleDateFormat("hh:mm:ss aa");
-                timeET.setText(timeFormater.format(time).toString());
+                SimpleDateFormat timeFormatter = new SimpleDateFormat("hh:mm:ss aa");
+                timeET.setText(timeFormatter.format(time).toString());
             }
         };
     }
 
-    //set date to edittextView by clicking date icon
+    //set date to editTextView by clicking date icon
     private void getDate() {
 
         dateIV.setOnClickListener(new View.OnClickListener() {

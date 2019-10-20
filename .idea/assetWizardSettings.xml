@@ -28,6 +28,7 @@
                         </option>
                         <option name="values">
                           <map>
+                            <entry key="color" value="ff0300" />
                             <entry key="outputName" value="ic_cancel_black_24dp" />
                             <entry key="sourceFile" value="C:\Users\ASUS" />
                           </map>

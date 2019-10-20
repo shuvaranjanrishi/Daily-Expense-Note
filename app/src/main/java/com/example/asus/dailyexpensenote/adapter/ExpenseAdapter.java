@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetDialog;
@@ -78,7 +79,6 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
             public void onClick(View v) {
 
                 View view = LayoutInflater.from(context).inflate(R.layout.fragment_bottom_sheet, null);
-
                 expenseType = view.findViewById(R.id.expenseTypeTVId);
                 expenseAmount = view.findViewById(R.id.expenseAmountTVId);
                 expenseDate = view.findViewById(R.id.expenseDateTVId);
@@ -169,7 +169,6 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
     }
 
     private void update(Expense expense) {
-
 
         Intent intent = new Intent(context,AddDailyExpenseActivity.class);
 

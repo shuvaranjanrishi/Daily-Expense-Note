@@ -53,6 +53,8 @@ public class ExpensesFragment extends Fragment {
     private FloatingActionButton fab;
     private List<Expense> expenseList;
 
+    private String fromDate;
+
     public ExpensesFragment() {
         // Required empty public constructor
     }
@@ -193,7 +195,6 @@ public class ExpensesFragment extends Fragment {
             String expenseImage = cursor.getString(5);
 
             expenseList.add(new Expense(expenseId,expenseType,expenseAmount,expenseDate,expenseTime,expenseImage));
-
         }
     }
 
@@ -225,8 +226,8 @@ public class ExpensesFragment extends Fragment {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 month = month + 1;
-                String date = dayOfMonth + "/" + month + "/" + year;
-                fromDateTV.setText(date);
+                fromDate = dayOfMonth + "/" + month + "/" + year;
+                fromDateTV.setText(fromDate);
             }
         };
     }
@@ -234,35 +235,86 @@ public class ExpensesFragment extends Fragment {
     //set date to toDate TextView by clicking to date icon
     private void getToDate() {
 
-        toDateIV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            toDateIV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-                Calendar calendar = Calendar.getInstance();
-                int day = calendar.get(Calendar.DAY_OF_MONTH);
-                int month = calendar.get(Calendar.MONTH);
-                int year = calendar.get(Calendar.YEAR);
+                    if(fromDate != null){
 
-                DatePickerDialog datePickerDialog = new DatePickerDialog(
-                        getActivity(),
-                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
-                        mToDateSetListener,
-                        year, month, day
-                );
-                datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                datePickerDialog.setTitle("Please select date");
-                datePickerDialog.show();
-            }
-        });
+                        Calendar calendar = Calendar.getInstance();
+                        int day = calendar.get(Calendar.DAY_OF_MONTH);
+                        int month = calendar.get(Calendar.MONTH);
+                        int year = calendar.get(Calendar.YEAR);
 
-        mToDateSetListener = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                month = month + 1;
-                String date = dayOfMonth + "/" + month + "/" + year;
-                toDateTV.setText(date);
-            }
-        };
+                        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                                getActivity(),
+                                android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                                mToDateSetListener,
+                                year, month, day
+                        );
+
+                        datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        datePickerDialog.setTitle("Please select date");
+                        datePickerDialog.show();
+
+                    }else {
+                        Toast.makeText(getActivity(), "Select From Date First", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+            mToDateSetListener = new DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                    month = month + 1;
+                    String toDate = dayOfMonth + "/" + month + "/" + year;
+                    toDateTV.setText(toDate);
+                    setDataAccordingToDate(toDate);
+                }
+            };
+    }
+
+    private void setDataAccordingToDate(String toDate) {
+
+        String selectedItem = spinner.getSelectedItem().toString();
+        Cursor cursor;
+
+        switch (selectedItem){
+            case "Select Expense Type":
+                cursor = myDBHelper.getData("SELECT * FROM expense WHERE expense_date BETWEEN '"+fromDate+"' AND '"+toDate+"' ");
+                setData(cursor);
+                break;
+
+            case "Electric Bill":
+                cursor = myDBHelper.getData("SELECT * FROM expense WHERE expense_type = 'Electricity Bill' AND expense_date BETWEEN '"+fromDate+"' AND '"+toDate+"' ");
+                setData(cursor);
+                break;
+
+            case "Transport Cost":
+                cursor = myDBHelper.getData("SELECT * FROM expense WHERE expense_type = 'Transport Cost' AND expense_date BETWEEN '"+fromDate+"' AND '"+toDate+"' ");
+                setData(cursor);
+                break;
+
+            case "Medical Cost":
+                cursor = myDBHelper.getData("SELECT * FROM expense WHERE expense_type = 'Medical Cost' AND expense_date BETWEEN '"+fromDate+"' AND '"+toDate+"' ");
+                setData(cursor);
+                break;
+
+            case "Lunch":
+                cursor = myDBHelper.getData("SELECT * FROM expense WHERE expense_type = 'Lunch' AND expense_date BETWEEN '"+fromDate+"' AND '"+toDate+"' ");
+                setData(cursor);
+                break;
+
+            case "Dinner":
+                cursor = myDBHelper.getData("SELECT * FROM expense WHERE expense_type = 'Dinner' AND expense_date BETWEEN '"+fromDate+"' AND '"+toDate+"' ");
+                setData(cursor);
+                break;
+
+            case "Others":
+                cursor = myDBHelper.getData("SELECT * FROM expense WHERE expense_type = 'Others' AND expense_date BETWEEN '"+fromDate+"' AND '"+toDate+"' ");
+                setData(cursor);
+                break;
+        }
     }
 
     //initialize all components
