@@ -46,7 +46,7 @@ public class AddDailyExpenseActivity extends AppCompatActivity {
 
     private EditText amountET,dateET,timeET;
     private Button addDocumentBtn,addExpenseBtn;
-    private ImageView dateIV,timeIV,documentIV,documentCancelIV;
+    private ImageView documentIV,documentCancelIV;
 
     private DatePickerDialog.OnDateSetListener mDateSetListener;
     private TimePickerDialog.OnTimeSetListener mTimeSetListener;
@@ -224,26 +224,39 @@ public class AddDailyExpenseActivity extends AppCompatActivity {
             Toast.makeText(this, "Please Select Expense Type !", Toast.LENGTH_SHORT).show();
             valid = false;
         }
-        if(expenseAmount.isEmpty()){
-            amountET.setError("Enter Amount");
+
+        if(expenseAmount.isEmpty() ){
+            amountET.setError("Please Enter Amount");
             valid = false;
-        }else {
+        }else if (expenseAmount.charAt(0)=='.' || expenseAmount.equals("0") ){
+            amountET.setError("Please Enter Valid Amount");
+            valid = false;
+        }
+        else {
             amountET.setError(null);
         }
+
         if(expenseDate.isEmpty()){
-            dateET.setError("Select Date");
+            dateET.setError("Please Select Date");
             valid = false;
         }else {
             dateET.setError(null);
         }
 
+        if(expenseTime.isEmpty()){
+            timeET.setError("Please Select Date");
+            valid = false;
+        }else {
+            timeET.setError(null);
+        }
+
         return valid;
     }
 
-    //set time to edittextView by clicking date icon
+    //set time to editTextView by clicking date icon
     private void getTime() {
 
-        timeIV.setOnClickListener(new View.OnClickListener() {
+        timeET.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -275,7 +288,7 @@ public class AddDailyExpenseActivity extends AppCompatActivity {
     //set date to editTextView by clicking date icon
     private void getDate() {
 
-        dateIV.setOnClickListener(new View.OnClickListener() {
+        dateET.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -355,8 +368,6 @@ public class AddDailyExpenseActivity extends AppCompatActivity {
         dateET = findViewById(R.id.expenseDateETId);
         timeET = findViewById(R.id.expenseTimeETId);
 
-        dateIV = findViewById(R.id.dateIVId);
-        timeIV = findViewById(R.id.timeIVId);
         documentIV = findViewById(R.id.documentIVId);
         documentCancelIV = findViewById(R.id.cancelIVId);
 

@@ -36,19 +36,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <EditText
-            android:clickable="false"
+            android:drawableRight="@drawable/ic_date_range_black_24dp"
+            android:focusable="false"
             android:layout_weight="1"
             android:layout_marginBottom="5dp"
             android:id="@+id/expenseDateETId"
             android:hint="Enter Expense Date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-        <ImageView
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_date_range_black_24dp"
-            android:id="@+id/dateIVId"
-            android:layout_width="50dp"
-            android:layout_height="40dp" />
     </LinearLayout>
 
     <LinearLayout
@@ -57,17 +52,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <EditText
+            android:focusable="false"
+            android:drawableRight="@drawable/ic_access_time_black_24dp"
             android:layout_weight="1"
             android:layout_marginBottom="5dp"
             android:id="@+id/expenseTimeETId"
             android:hint="Enter Expense Time (optional)"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-        <ImageView
-            android:src="@drawable/ic_access_time_black_24dp"
-            android:id="@+id/timeIVId"
-            android:layout_width="50dp"
-            android:layout_height="40dp" />
     </LinearLayout>
 
     <LinearLayout
