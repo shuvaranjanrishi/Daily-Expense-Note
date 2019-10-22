@@ -89,7 +89,6 @@ public class MyDBHelper extends SQLiteOpenHelper {
 
     //getSpecificData
     public Cursor getData(String sql) {
-
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         return sqLiteDatabase.rawQuery(sql,null);
     }

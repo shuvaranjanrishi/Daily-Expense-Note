@@ -285,7 +285,7 @@ public class ExpensesFragment extends Fragment {
                 setData(cursor);
                 break;
 
-            case "Electric Bill":
+            case "Electricity Bill":
                 cursor = myDBHelper.getData("SELECT * FROM expense WHERE expense_type = 'Electricity Bill' AND expense_date BETWEEN '"+fromDate+"' AND '"+toDate+"' ");
                 setData(cursor);
                 break;

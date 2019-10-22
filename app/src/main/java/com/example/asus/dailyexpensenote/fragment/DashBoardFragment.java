@@ -163,7 +163,7 @@ public class DashBoardFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
 
-                    if(fromDate != null){
+                 //   if(fromDate != null){
                         Calendar calendar = Calendar.getInstance();
                         int day = calendar.get(Calendar.DAY_OF_MONTH);
                         int month = calendar.get(Calendar.MONTH);
@@ -178,9 +178,9 @@ public class DashBoardFragment extends Fragment {
                         datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                         datePickerDialog.setTitle("Please select date");
                         datePickerDialog.show();
-                    }else {
-                        Toast.makeText(getActivity(), "Select From Date First", Toast.LENGTH_SHORT).show();
-                    }
+                    //}else {
+                  //      Toast.makeText(getActivity(), "Select From Date First", Toast.LENGTH_SHORT).show();
+                  //  }
 
                 }
             });
@@ -211,8 +211,8 @@ public class DashBoardFragment extends Fragment {
                 }
                 break;
 
-            case "Electric Bill":
-                cursor = myDBHelper.getData("SELECT SUM (expense_amount) AS total FROM expense WHERE expense_date BETWEEN '"+fromDate+"' AND '"+toDate+"' ");
+            case "Electricity Bill":
+                cursor = myDBHelper.getData("SELECT SUM (expense_amount) AS total FROM expense WHERE expense_type = 'Electricity Bill' AND expense_date BETWEEN '"+fromDate+"' AND '"+toDate+"' ");
                 if (cursor.moveToFirst()) {
                     int total = cursor.getInt(cursor.getColumnIndex("total"));
                     totalExpenseTV.setText(String.valueOf(total));
@@ -220,7 +220,7 @@ public class DashBoardFragment extends Fragment {
                 break;
 
             case "Transport Cost":
-                cursor = myDBHelper.getData("SELECT SUM (expense_amount) AS total FROM expense WHERE expense_date BETWEEN '"+fromDate+"' AND '"+toDate+"' ");
+                cursor = myDBHelper.getData("SELECT SUM (expense_amount) AS total FROM expense WHERE expense_type = 'Transport Cost' AND expense_date BETWEEN '"+fromDate+"' AND '"+toDate+"' ");
                 if (cursor.moveToFirst()) {
                     int total = cursor.getInt(cursor.getColumnIndex("total"));
                     totalExpenseTV.setText(String.valueOf(total));
@@ -228,7 +228,7 @@ public class DashBoardFragment extends Fragment {
                 break;
 
             case "Medical Cost":
-                cursor = myDBHelper.getData("SELECT SUM (expense_amount) AS total FROM expense WHERE expense_date BETWEEN '"+fromDate+"' AND '"+toDate+"' ");
+                cursor = myDBHelper.getData("SELECT SUM (expense_amount) AS total FROM expense WHERE expense_type = 'Medical Cost' AND expense_date BETWEEN '"+fromDate+"' AND '"+toDate+"' ");
                 if (cursor.moveToFirst()) {
                     int total = cursor.getInt(cursor.getColumnIndex("total"));
                     totalExpenseTV.setText(String.valueOf(total));
@@ -236,7 +236,7 @@ public class DashBoardFragment extends Fragment {
                 break;
 
             case "Lunch":
-                cursor = myDBHelper.getData("SELECT SUM (expense_amount) AS total FROM expense WHERE expense_date BETWEEN '"+fromDate+"' AND '"+toDate+"' ");
+                cursor = myDBHelper.getData("SELECT SUM (expense_amount) AS total FROM expense WHERE expense_type = 'Lunch' AND expense_date BETWEEN '"+fromDate+"' AND '"+toDate+"' ");
                 if (cursor.moveToFirst()) {
                     int total = cursor.getInt(cursor.getColumnIndex("total"));
                     totalExpenseTV.setText(String.valueOf(total));
@@ -244,7 +244,7 @@ public class DashBoardFragment extends Fragment {
                 break;
 
             case "Dinner":
-                cursor = myDBHelper.getData("SELECT SUM (expense_amount) AS total FROM expense WHERE expense_date BETWEEN '"+fromDate+"' AND '"+toDate+"' ");
+                cursor = myDBHelper.getData("SELECT SUM (expense_amount) AS total FROM expense WHERE expense_type = 'Dinner' AND expense_date BETWEEN '"+fromDate+"' AND '"+toDate+"' ");
                 if (cursor.moveToFirst()) {
                     int total = cursor.getInt(cursor.getColumnIndex("total"));
                     totalExpenseTV.setText(String.valueOf(total));
@@ -252,7 +252,7 @@ public class DashBoardFragment extends Fragment {
                 break;
 
             case "Others":
-                cursor = myDBHelper.getData("SELECT SUM (expense_amount) AS total FROM expense WHERE expense_date BETWEEN '"+fromDate+"' AND '"+toDate+"' ");
+                cursor = myDBHelper.getData("SELECT SUM (expense_amount) AS total FROM expense WHERE expense_type = 'Others' AND expense_date BETWEEN '"+fromDate+"' AND '"+toDate+"' ");
                 if (cursor.moveToFirst()) {
                     int total = cursor.getInt(cursor.getColumnIndex("total"));
                     totalExpenseTV.setText(String.valueOf(total));

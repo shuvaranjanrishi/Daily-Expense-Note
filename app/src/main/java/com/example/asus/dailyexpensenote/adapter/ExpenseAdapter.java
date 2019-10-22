@@ -91,7 +91,7 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
 
                 //time empty checking
                 if(expense.getExpenseTime() == null || expense.getExpenseTime().isEmpty()){
-                    expenseTime.setText("No time Added");
+                    expenseTime.setText("No Time Added");
                 }else {
                     expenseTime.setText(expense.getExpenseTime());
                 }
@@ -105,7 +105,12 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
                         builder.setContentView(view);
 
                         ImageView imageView = view.findViewById(R.id.imageViewLayoutDesignId);
-                        imageView.setImageBitmap(stringToBitmap(expense.getExpenseImage()));
+                        //image empty checking
+                        if(expense.getExpenseImage() == null || expense.getExpenseImage().isEmpty()){
+                            imageView.setImageResource(R.drawable.ic_assignment_black_24dp);
+                        }else {
+                            imageView.setImageBitmap(stringToBitmap(expense.getExpenseImage()));
+                        }
                         builder.show();
                     }
                 });

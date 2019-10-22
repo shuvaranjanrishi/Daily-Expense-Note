@@ -59,6 +59,9 @@ public class AddDailyExpenseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_daily_expense);
+        //code for back button
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         init();
 
@@ -139,6 +142,14 @@ public class AddDailyExpenseActivity extends AppCompatActivity {
                 }
             }
         });
+
+    }
+
+    //back button action
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
     private String bitmapToString(Bitmap bitmap){
