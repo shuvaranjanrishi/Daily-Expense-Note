@@ -15,12 +15,14 @@ import com.example.asus.dailyexpensenote.fragment.ExpensesFragment;
 
 public class MainActivity extends AppCompatActivity {
 
+    private int mark = 0;
     private BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setTitle("Dash Board");
 
         replaceFragment(new DashBoardFragment());//set default fragment in dash board
 
@@ -33,10 +35,21 @@ public class MainActivity extends AppCompatActivity {
 
                 switch (menuItem.getItemId()){
                     case R.id.dashBoardNavItemId:
-                        replaceFragment(new DashBoardFragment());
+
+                        if(mark == 1){
+                            replaceFragment(new DashBoardFragment());
+                            mark--;
+                        }
+                        setTitle("Dash Board");
                         return true;
+
                     case R.id.expensesNavItemId:
-                        replaceFragment(new ExpensesFragment());
+
+                        if(mark == 0){
+                            replaceFragment(new ExpensesFragment());
+                            mark++;
+                        }
+                        setTitle("Expenses");
                         return true;
                 }
                 return false;

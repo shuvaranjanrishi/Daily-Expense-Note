@@ -91,20 +91,27 @@ public class DashBoardFragment extends Fragment {
                     }
                 }
                 else if(position == 4){
-                    Cursor cursor = myDBHelper.getData("SELECT SUM (expense_amount) AS total FROM expense WHERE expense_type = 'Lunch'");
+                    Cursor cursor = myDBHelper.getData("SELECT SUM (expense_amount) AS total FROM expense WHERE expense_type = 'Breakfast'");
                     if (cursor.moveToFirst()) {
                         int total = cursor.getInt(cursor.getColumnIndex("total"));
                         totalExpenseTV.setText(String.valueOf(total));
                     }
                 }
                 else if(position == 5){
-                    Cursor cursor = myDBHelper.getData("SELECT SUM (expense_amount) AS total FROM expense WHERE expense_type = 'Dinner'");
+                    Cursor cursor = myDBHelper.getData("SELECT SUM (expense_amount) AS total FROM expense WHERE expense_type = 'Lunch'");
                     if (cursor.moveToFirst()) {
                         int total = cursor.getInt(cursor.getColumnIndex("total"));
                         totalExpenseTV.setText(String.valueOf(total));
                     }
                 }
                 else if(position == 6){
+                    Cursor cursor = myDBHelper.getData("SELECT SUM (expense_amount) AS total FROM expense WHERE expense_type = 'Dinner'");
+                    if (cursor.moveToFirst()) {
+                        int total = cursor.getInt(cursor.getColumnIndex("total"));
+                        totalExpenseTV.setText(String.valueOf(total));
+                    }
+                }
+                else if(position == 7){
                     Cursor cursor = myDBHelper.getData("SELECT SUM (expense_amount) AS total FROM expense WHERE expense_type = 'Others'");
                     if (cursor.moveToFirst()) {
                         int total = cursor.getInt(cursor.getColumnIndex("total"));
@@ -163,7 +170,6 @@ public class DashBoardFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
 
-                 //   if(fromDate != null){
                         Calendar calendar = Calendar.getInstance();
                         int day = calendar.get(Calendar.DAY_OF_MONTH);
                         int month = calendar.get(Calendar.MONTH);
@@ -178,10 +184,6 @@ public class DashBoardFragment extends Fragment {
                         datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                         datePickerDialog.setTitle("Please select date");
                         datePickerDialog.show();
-                    //}else {
-                  //      Toast.makeText(getActivity(), "Select From Date First", Toast.LENGTH_SHORT).show();
-                  //  }
-
                 }
             });
 
@@ -229,6 +231,14 @@ public class DashBoardFragment extends Fragment {
 
             case "Medical Cost":
                 cursor = myDBHelper.getData("SELECT SUM (expense_amount) AS total FROM expense WHERE expense_type = 'Medical Cost' AND expense_date BETWEEN '"+fromDate+"' AND '"+toDate+"' ");
+                if (cursor.moveToFirst()) {
+                    int total = cursor.getInt(cursor.getColumnIndex("total"));
+                    totalExpenseTV.setText(String.valueOf(total));
+                }
+                break;
+
+            case "Breakfast":
+                cursor = myDBHelper.getData("SELECT SUM (expense_amount) AS total FROM expense WHERE expense_type = 'Breakfast' AND expense_date BETWEEN '"+fromDate+"' AND '"+toDate+"' ");
                 if (cursor.moveToFirst()) {
                     int total = cursor.getInt(cursor.getColumnIndex("total"));
                     totalExpenseTV.setText(String.valueOf(total));
