@@ -2,18 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-
         android:id="@+id/createBackupItemId"
         android:title="Create Backup"></item>
     <item
         android:id="@+id/importDataItemId"
-        android:title="Import Data">
-        <menu>
-            <item
-                android:icon="@drawable/ic_access_time_black_24dp"
-                android:title="sub menu"></item>
-        </menu>
-    </item>
+        android:title="Import Data"></item>
     <item
         android:id="@+id/clearAllDataItemId"
         android:title="Clear All Data"></item>
