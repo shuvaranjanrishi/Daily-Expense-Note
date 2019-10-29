@@ -65,6 +65,27 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()){
+            case R.id.createBackupItemId:
+                break;
+            case R.id.importDataItemId:
+                break;
+            case R.id.clearAllDataItemId:
+                break;
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     //initialize all component
     private void init() {
         bottomNavigationView = findViewById(R.id.bottomNavigationViewId);
