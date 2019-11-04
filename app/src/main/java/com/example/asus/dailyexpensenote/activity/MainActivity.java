@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
+    //main menu created
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu,menu);
