@@ -3,7 +3,8 @@ package com.example.asus.dailyexpensenote.permission;
 import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
-import android.support.v4.app.ActivityCompat;
+
+import androidx.core.app.ActivityCompat;
 
 import static com.example.asus.dailyexpensenote.activity.MainActivity.REQUEST_CODE_PERMISSIONS;
 

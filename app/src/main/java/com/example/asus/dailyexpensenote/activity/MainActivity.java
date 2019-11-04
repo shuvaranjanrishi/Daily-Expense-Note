@@ -1,25 +1,26 @@
 package com.example.asus.dailyexpensenote.activity;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Environment;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.asus.dailyexpensenote.R;
 import com.example.asus.dailyexpensenote.backup.LocalBackup;
 import com.example.asus.dailyexpensenote.database.MyDBHelper;
 import com.example.asus.dailyexpensenote.fragment.DashBoardFragment;
 import com.example.asus.dailyexpensenote.fragment.ExpensesFragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.File;
 
@@ -31,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
     private LocalBackup localBackup;
 
     public static final int REQUEST_CODE_PERMISSIONS = 2;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

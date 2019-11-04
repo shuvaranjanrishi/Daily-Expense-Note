@@ -1,24 +1,12 @@
 package com.example.asus.dailyexpensenote.fragment;
 
-
-import android.content.Context;
-import android.database.Cursor;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.design.widget.BottomSheetDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.asus.dailyexpensenote.R;
-import com.example.asus.dailyexpensenote.database.MyDBHelper;
-import com.example.asus.dailyexpensenote.model_class.Expense;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 public class BottomSheetFragment extends BottomSheetDialogFragment {
 

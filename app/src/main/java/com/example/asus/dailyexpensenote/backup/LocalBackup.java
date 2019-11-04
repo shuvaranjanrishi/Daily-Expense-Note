@@ -1,7 +1,7 @@
 package com.example.asus.dailyexpensenote.backup;
 
+import android.app.AlertDialog;
 import android.os.Environment;
-import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
