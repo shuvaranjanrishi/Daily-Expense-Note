@@ -20,6 +20,9 @@ import com.example.asus.dailyexpensenote.backup.LocalBackup;
 import com.example.asus.dailyexpensenote.database.MyDBHelper;
 import com.example.asus.dailyexpensenote.fragment.DashBoardFragment;
 import com.example.asus.dailyexpensenote.fragment.ExpensesFragment;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.File;
@@ -32,8 +35,6 @@ public class MainActivity extends AppCompatActivity {
     private LocalBackup localBackup;
 
     public static final int REQUEST_CODE_PERMISSIONS = 2;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

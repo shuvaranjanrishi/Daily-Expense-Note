@@ -20,6 +20,9 @@ import androidx.fragment.app.Fragment;
 
 import com.example.asus.dailyexpensenote.R;
 import com.example.asus.dailyexpensenote.database.MyDBHelper;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 
 import java.util.Calendar;
 
@@ -39,16 +42,24 @@ public class DashBoardFragment extends Fragment {
 
     private String fromDate;
 
+    private AdView mAdView;
+    private AdRequest adRequest;
+
     public DashBoardFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_dash_board, container, false);
+
+        //for advertizement
+        MobileAds.initialize(getActivity(),"ca-app-pub-7208592403356552~5173413784");
+        mAdView = view.findViewById(R.id.adView);
+        adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
         init(view);
 
@@ -88,27 +99,34 @@ public class DashBoardFragment extends Fragment {
                     }
                 }
                 else if(position == 4){
-                    Cursor cursor = myDBHelper.getData("SELECT SUM (expense_amount) AS total FROM expense WHERE expense_type = 'Breakfast'");
+                    Cursor cursor = myDBHelper.getData("SELECT SUM (expense_amount) AS total FROM expense WHERE expense_type = 'Mobile Bill'");
                     if (cursor.moveToFirst()) {
                         int total = cursor.getInt(cursor.getColumnIndex("total"));
                         totalExpenseTV.setText(String.valueOf(total));
                     }
                 }
                 else if(position == 5){
-                    Cursor cursor = myDBHelper.getData("SELECT SUM (expense_amount) AS total FROM expense WHERE expense_type = 'Lunch'");
+                    Cursor cursor = myDBHelper.getData("SELECT SUM (expense_amount) AS total FROM expense WHERE expense_type = 'Breakfast'");
                     if (cursor.moveToFirst()) {
                         int total = cursor.getInt(cursor.getColumnIndex("total"));
                         totalExpenseTV.setText(String.valueOf(total));
                     }
                 }
                 else if(position == 6){
-                    Cursor cursor = myDBHelper.getData("SELECT SUM (expense_amount) AS total FROM expense WHERE expense_type = 'Dinner'");
+                    Cursor cursor = myDBHelper.getData("SELECT SUM (expense_amount) AS total FROM expense WHERE expense_type = 'Lunch'");
                     if (cursor.moveToFirst()) {
                         int total = cursor.getInt(cursor.getColumnIndex("total"));
                         totalExpenseTV.setText(String.valueOf(total));
                     }
                 }
                 else if(position == 7){
+                    Cursor cursor = myDBHelper.getData("SELECT SUM (expense_amount) AS total FROM expense WHERE expense_type = 'Dinner'");
+                    if (cursor.moveToFirst()) {
+                        int total = cursor.getInt(cursor.getColumnIndex("total"));
+                        totalExpenseTV.setText(String.valueOf(total));
+                    }
+                }
+                else if(position == 8){
                     Cursor cursor = myDBHelper.getData("SELECT SUM (expense_amount) AS total FROM expense WHERE expense_type = 'Others'");
                     if (cursor.moveToFirst()) {
                         int total = cursor.getInt(cursor.getColumnIndex("total"));
@@ -228,6 +246,14 @@ public class DashBoardFragment extends Fragment {
 
             case "Medical Cost":
                 cursor = myDBHelper.getData("SELECT SUM (expense_amount) AS total FROM expense WHERE expense_type = 'Medical Cost' AND expense_date BETWEEN '"+fromDate+"' AND '"+toDate+"' ");
+                if (cursor.moveToFirst()) {
+                    int total = cursor.getInt(cursor.getColumnIndex("total"));
+                    totalExpenseTV.setText(String.valueOf(total));
+                }
+                break;
+
+            case "Mobile Bill":
+                cursor = myDBHelper.getData("SELECT SUM (expense_amount) AS total FROM expense WHERE expense_type = 'Mobile Bill' AND expense_date BETWEEN '"+fromDate+"' AND '"+toDate+"' ");
                 if (cursor.moveToFirst()) {
                     int total = cursor.getInt(cursor.getColumnIndex("total"));
                     totalExpenseTV.setText(String.valueOf(total));

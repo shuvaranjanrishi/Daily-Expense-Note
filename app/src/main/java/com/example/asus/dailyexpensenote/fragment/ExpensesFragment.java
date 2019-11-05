@@ -1,6 +1,5 @@
 package com.example.asus.dailyexpensenote.fragment;
 
-
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.database.Cursor;
@@ -58,7 +57,6 @@ public class ExpensesFragment extends Fragment {
         // Required empty public constructor
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -95,18 +93,22 @@ public class ExpensesFragment extends Fragment {
                     setData(cursor);
                 }
                 else if(position == 4){
-                    Cursor cursor = myDBHelper.getData("SELECT * FROM expense WHERE expense_type = 'Breakfast'");
+                    Cursor cursor = myDBHelper.getData("SELECT * FROM expense WHERE expense_type = 'Mobile Bil'");
                     setData(cursor);
                 }
                 else if(position == 5){
-                    Cursor cursor = myDBHelper.getData("SELECT * FROM expense WHERE expense_type = 'Lunch'");
+                    Cursor cursor = myDBHelper.getData("SELECT * FROM expense WHERE expense_type = 'Breakfast'");
                     setData(cursor);
                 }
                 else if(position == 6){
-                    Cursor cursor = myDBHelper.getData("SELECT * FROM expense WHERE expense_type = 'Dinner'");
+                    Cursor cursor = myDBHelper.getData("SELECT * FROM expense WHERE expense_type = 'Lunch'");
                     setData(cursor);
                 }
                 else if(position == 7){
+                    Cursor cursor = myDBHelper.getData("SELECT * FROM expense WHERE expense_type = 'Dinner'");
+                    setData(cursor);
+                }
+                else if(position == 8){
                     Cursor cursor = myDBHelper.getData("SELECT * FROM expense WHERE expense_type = 'Others'");
                     setData(cursor);
                 }
@@ -295,6 +297,11 @@ public class ExpensesFragment extends Fragment {
 
             case "Medical Cost":
                 cursor = myDBHelper.getData("SELECT * FROM expense WHERE expense_type = 'Medical Cost' AND expense_date BETWEEN '"+fromDate+"' AND '"+toDate+"' ");
+                setData(cursor);
+                break;
+
+            case "Mobile Bill":
+                cursor = myDBHelper.getData("SELECT * FROM expense WHERE expense_type = 'Mobile Bill' AND expense_date BETWEEN '"+fromDate+"' AND '"+toDate+"' ");
                 setData(cursor);
                 break;
 
